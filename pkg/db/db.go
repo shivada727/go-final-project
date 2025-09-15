@@ -27,54 +27,53 @@ CREATE INDEX idx_scheduler_date ON scheduler(date);
 func Init(dbFile string) error {
 	install := false
 
-	if _, error := os.Stat(dbFile); error != nil {
+	if _, err := os.Stat(dbFile); err != nil {
 		install = true
 	}
 
-	db, error := sql.Open("sqlite", dbFile)
+	db, err := sql.Open("sqlite", dbFile)
 
-	if error != nil {
-		return fmt.Errorf("open sqlite: %w", error)
+	if err != nil {
+		return fmt.Errorf("open sqlite: %w", err)
 	}
 
-	if error := db.Ping(); error != nil {
+	if err := db.Ping(); err != nil {
 		_ = db.Close()
 
-		return fmt.Errorf("ping sqlite: %w", error)
+		return fmt.Errorf("ping sqlite: %w", err)
 	}
 
-	if _, error := db.Exec(`PRAGMA foreign_keys = ON;`); error != nil {
+	if _, err := db.Exec(`PRAGMA foreign_keys = ON;`); err != nil {
 		_ = db.Close()
 
-		return fmt.Errorf("set pragma foreign_keys: %w", error)
+		return fmt.Errorf("set pragma foreign_keys: %w", err)
 	}
-	if _, error := db.Exec(`PRAGMA busy_timeout = 5000;`); error != nil {
+	if _, err := db.Exec(`PRAGMA busy_timeout = 5000;`); err != nil {
 		_ = db.Close()
 
-		return fmt.Errorf("set pragma busy_timeout: %w", error)
+		return fmt.Errorf("set pragma busy_timeout: %w", err)
 	}
 
 	if install {
-		transaction, error := db.Begin()
+		transaction, err := db.Begin()
 
-		if error != nil {
+		if err != nil {
 			_ = db.Close()
-
-			return fmt.Errorf("begin tx: %w", error)
+			return fmt.Errorf("begin tx: %w", err)
 		}
 
-		if _, error := transaction.Exec(schema); error != nil {
+		if _, err := transaction.Exec(schema); err != nil {
 			_ = transaction.Rollback()
 
 			_ = db.Close()
 
-			return fmt.Errorf("apply schema: %w", error)
+			return fmt.Errorf("apply schema: %w", err)
 		}
 
 		if err := transaction.Commit(); err != nil {
 			_ = db.Close()
 
-			return fmt.Errorf("commit schema: %w", error)
+			return fmt.Errorf("commit schema: %w", err)
 		}
 	}
 

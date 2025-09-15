@@ -16,15 +16,15 @@ func main() {
 		dbFile = filepath.Join(".", "scheduler.db")
 	}
 
-	if error := db.Init(dbFile); error != nil {
-		log.Fatal("db init:", error)
+	if err := db.Init(dbFile); err != nil {
+		log.Fatal("db init:", err)
 	}
 
 	webDir := filepath.Join(".", "web")
 
 	port := server.ResolvePort()
 
-	if error := server.Run(webDir, port); error != nil {
-		log.Fatal(error)
+	if err := server.Run(webDir, port); err != nil {
+		log.Fatal(err)
 	}
 }

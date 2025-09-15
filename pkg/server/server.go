@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"go-final-project/pkg/api"
 	"net/http"
 	"os"
 )
@@ -19,11 +20,15 @@ func ResolvePort() string {
 }
 
 func NewHandler(webDir string) (http.Handler, error) {
+	if _, err := os.Stat(webDir); err != nil {
+		return nil, fmt.Errorf("web dir not found: %s (%w)", webDir, err)
+	}
+
 	fs := http.FileServer(http.Dir(webDir))
-
 	mux := http.NewServeMux()
-
 	mux.Handle("/", fs)
+
+	api.Init(mux)
 
 	return mux, nil
 }
