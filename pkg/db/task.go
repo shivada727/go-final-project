@@ -88,3 +88,35 @@ func UpdateTask(t *Task) error {
 	}
 	return nil
 }
+
+func DeleteTask(id string) error {
+	const q = `DELETE FROM scheduler WHERE id = ?;`
+	res, err := DB.Exec(q, id)
+	if err != nil {
+		return err
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n == 0 {
+		return fmt.Errorf("Задача не найдена")
+	}
+	return nil
+}
+
+func UpdateDate(next string, id string) error {
+	const q = `UPDATE scheduler SET date = ? WHERE id = ?;`
+	res, err := DB.Exec(q, next, id)
+	if err != nil {
+		return err
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n == 0 {
+		return fmt.Errorf("Задача не найдена")
+	}
+	return nil
+}
