@@ -54,3 +54,37 @@ func Tasks(limit int) ([]*Task, error) {
 	}
 	return out, nil
 }
+
+func GetTask(id string) (*Task, error) {
+	const q = `
+		SELECT id, date, title, comment, repeat
+		FROM scheduler
+		WHERE id = ?;
+	`
+	var t Task
+	err := DB.QueryRow(q, id).Scan(&t.ID, &t.Date, &t.Title, &t.Comment, &t.Repeat)
+	if err != nil {
+		return nil, err
+	}
+	return &t, nil
+}
+
+func UpdateTask(t *Task) error {
+	const q = `
+		UPDATE scheduler
+		SET date = ?, title = ?, comment = ?, repeat = ?
+		WHERE id = ?;
+	`
+	res, err := DB.Exec(q, t.Date, t.Title, t.Comment, t.Repeat, t.ID)
+	if err != nil {
+		return err
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n == 0 {
+		return fmt.Errorf("Задача не найдена")
+	}
+	return nil
+}
