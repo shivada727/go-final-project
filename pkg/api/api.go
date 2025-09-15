@@ -8,6 +8,7 @@ import (
 func Init(mux *http.ServeMux) {
 	mux.HandleFunc("/api/nextdate", nextDateHandler)
 	mux.HandleFunc("/api/task", taskHandler)
+	mux.HandleFunc("/api/tasks", tasksHandler)
 }
 
 func nextDateHandler(w http.ResponseWriter, r *http.Request) {
