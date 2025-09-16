@@ -26,6 +26,7 @@ func NextDate(now time.Time, dstart string, repeat string) (string, error) {
 	now = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 
 	parts := strings.Fields(repeat)
+
 	switch parts[0] {
 	case "y":
 		if len(parts) != 1 {
@@ -70,6 +71,7 @@ func NextDate(now time.Time, dstart string, repeat string) (string, error) {
 		if len(parts) != 2 {
 			return "", errors.New("bad format for 'w'")
 		}
+
 		allowed := make(map[int]bool, 7)
 
 		for _, s := range strings.Split(parts[1], ",") {
@@ -93,6 +95,7 @@ func NextDate(now time.Time, dstart string, repeat string) (string, error) {
 				}
 			}
 		}
+
 		return "", errors.New("no next date found for 'w'")
 
 	case "m":

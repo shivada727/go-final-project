@@ -23,6 +23,7 @@ type tasksResp struct {
 func tasksHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{"error": "метод не поддерживается"})
+
 		return
 	}
 
@@ -31,6 +32,7 @@ func tasksHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := db.Tasks(limit)
 	if err != nil {
 		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": fmt.Sprintf("ошибка выборки: %v", err)})
+
 		return
 	}
 

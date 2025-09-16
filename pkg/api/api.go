@@ -9,6 +9,7 @@ func Init(mux *http.ServeMux) {
 	mux.HandleFunc("/api/nextdate", nextDateHandler)
 	mux.HandleFunc("/api/task", taskHandler)
 	mux.HandleFunc("/api/tasks", tasksHandler)
+	mux.HandleFunc("/api/task/done", doneTaskHandler)
 }
 
 func nextDateHandler(w http.ResponseWriter, r *http.Request) {
@@ -34,6 +35,7 @@ func nextDateHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "date is required", http.StatusBadRequest)
 		return
 	}
+
 	if repeat == "" {
 		http.Error(w, "repeat is required", http.StatusBadRequest)
 		return

@@ -10,17 +10,20 @@ import (
 func deleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{"error": "метод не поддерживается"})
+
 		return
 	}
 
 	id := strings.TrimSpace(r.URL.Query().Get("id"))
 	if id == "" {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "Не указан идентификатор"})
+
 		return
 	}
 
 	if err := db.DeleteTask(id); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": err.Error()})
+
 		return
 	}
 

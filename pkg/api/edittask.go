@@ -21,31 +21,41 @@ type editPayload struct {
 func editTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{"error": "метод не поддерживается"})
+
 		return
 	}
+
 	defer r.Body.Close()
 
 	var p editPayload
+
 	if err := json.NewDecoder(r.Body).Decode(&p); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": fmt.Sprintf("ошибка разбора json: %v", err)})
+
 		return
 	}
 
 	p.ID = strings.TrimSpace(p.ID)
+
 	if p.ID == "" {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "Не указан идентификатор"})
+
 		return
 	}
 
 	title := strings.TrimSpace(p.Title)
+
 	if title == "" {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "не указан заголовок задачи"})
+
 		return
 	}
 
 	parsedID, err := strconv.ParseInt(p.ID, 10, 64)
+
 	if err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "некорректный идентификатор"})
+
 		return
 	}
 
@@ -58,11 +68,13 @@ func editTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := normalizeTaskDate(&t); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": err.Error()})
+
 		return
 	}
 
 	if err := db.UpdateTask(&t); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": err.Error()})
+
 		return
 	}
 
