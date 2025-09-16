@@ -38,10 +38,14 @@ go build -o todo-server .
 ## Как запустить тесты
 
 1. Запусти сервер:
+```bash
 go run .
+```
+
 2. В другом терминале:
 
-# по шагам
+```bash
+#По шагам
 go test -run ^TestAddTask$   ./tests
 go test -run ^TestTasks$     ./tests
 go test -run ^TestTask$      ./tests
@@ -51,6 +55,7 @@ go test -run ^TestDelTask$   ./tests
 
 # все тесты
 go test ./tests
+```
 
 # Настройки tests/settings.go
 var BaseURL = "http://localhost:7540"
