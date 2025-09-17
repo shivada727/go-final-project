@@ -13,12 +13,6 @@ import (
 )
 
 func addTaskHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{"error": "метод не поддерживается"})
-
-		return
-	}
-
 	var t db.Task
 	if err := json.NewDecoder(r.Body).Decode(&t); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": fmt.Sprintf("ошибка разбора json: %v", err)})

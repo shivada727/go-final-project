@@ -20,6 +20,8 @@ func main() {
 		log.Fatal("db init:", err)
 	}
 
+	defer db.Close()
+
 	webDir := filepath.Join(".", "web")
 
 	port := server.ResolvePort()

@@ -15,6 +15,12 @@ func Init(mux *http.ServeMux) {
 func nextDateHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 
+	if r.Method != http.MethodGet {
+		w.Header().Set("Allow", http.MethodGet)
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	nowStr := r.FormValue("now")
 	dateStr := r.FormValue("date")
 	repeat := r.FormValue("repeat")
